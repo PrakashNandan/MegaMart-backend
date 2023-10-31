@@ -230,7 +230,7 @@ server.get('/', (req,res)=>{
         res.json({status:"success"});
 }) 
 
-// server.post('/products', createProduct)
+// server.post('/products', createProduct);
 
 
 server.listen(process.env.PORT, ()=>{
