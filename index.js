@@ -112,6 +112,12 @@ server.use('/cart', isAuth(),cartRouter.router);
 server.use('/orders',isAuth(), orderRouter.router);
 
 
+// this line we add to make react router work in case of other routes doesnt match
+server.get('*', (req, res) =>
+  res.sendFile(path.resolve('build', 'index.html'))
+);
+
+
 
 // Passport Strategies
 passport.use(
@@ -192,7 +198,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 
 server.post("/create-payment-intent", async (req, res) => {
-  const { items } = req.body;
+  const { items, orderId } = req.body;
 
     const {totalAmount} = req.body;
 
@@ -205,6 +211,13 @@ server.post("/create-payment-intent", async (req, res) => {
     automatic_payment_methods: {
       enabled: true,
     },
+
+    metadata: {
+      orderId
+    },
+
+
+
   });
 
   res.send({
@@ -225,10 +238,6 @@ async function main(){
 }
 
 
-
-server.get('/', (req,res)=>{
-        res.json({status:"success"});
-}) 
 
 // server.post('/products', createProduct);
 
